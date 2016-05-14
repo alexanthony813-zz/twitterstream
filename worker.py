@@ -8,7 +8,7 @@ MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
   MONGO_URL = MONGO_DEV_URL
 
-conn = MongoClient(MONGO_URL, MONGO_DEV_PORT)
+conn = MongoClient(MONGO_URL, MONGO_DEV_PORT, connect=False)
 db = conn.tweets
 
 def parse_cords(coordstring):
