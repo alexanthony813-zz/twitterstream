@@ -1,3 +1,3 @@
-web: gunicorn server.wsgi
+web: gunicorn server.py && python consumer.py
 worker: python worker.py
 
