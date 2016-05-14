@@ -78,4 +78,4 @@ if __name__ == '__main__':
         print 'we\'re doin it live!'
         app.run(host='rocky-atoll-27122.herokuapp.com', port=port)
     else:
-        app.run(host='localhost', port=port, debug=True, threaded=True)
+        app.run(host='test', port=port, debug=True, threaded=True)
