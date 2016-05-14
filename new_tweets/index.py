@@ -33,13 +33,13 @@ def index():
 #     oid = handle.mycollection.insert({"message":userinput})
 #     return redirect ("/")
 
-@app.route("/get_sentiment/<lat>/<lon>/<radius>", methods=['GET'])
-def info(lat, lon, radius):
+@app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
+def get_sentiment(lat, lon, km_radius):
     # coord = request.args.get('coord')
     # make circle with these coordinates
     lat = float(lat)
     lon = float(lon)
-    radius = int(radius)
+    degree_radius = (int(km_radius)/111.2)
 
     # perform aggregate by ranges of lat and long that would be within the circle
     # pipeline = [{ "$geoNear" : {
@@ -51,12 +51,17 @@ def info(lat, lon, radius):
                  # "maxDistance" :  max_distance,
                  # "num" : 100,
                  # "spherical" : True
-    print 'hellur',lat, lon, radius
-    tweets = handle.tweets.find({"coords": {"$near": [lat, lon]}}).limit(radius)
+    print 'hellur', degree_radius
+    query = {"coords" : SON([("$near", [lat, lon]), ("$maxDistance", degree_radius)])}
+    # tweets = handle.tweets.find({"coords": [{"$near": [lat, lon]}, {"$max_distance" : degree_radius}]})
+    tweets = handle.tweets.find(query)
+
+    # .limit(degree_radius)
     json_tweets = []
 
     for tweet in tweets:
         # refactored to use aggregate in tweets query
+        print tweet
         json_tweets.append(dumps(tweet))
         # if in_circle(lat, lon, radius, tweet['coords']):
 
