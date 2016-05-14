@@ -6,7 +6,7 @@ from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
 from bson.son import SON
 import requests
-from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL
 is_prod = os.environ.get('IS_HEROKU', None)
 
 
@@ -20,7 +20,7 @@ def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
     if is_prod:
-        MONGO_URL = MONGO_PROD_URL
+        MONGO_URL = MONGOHQ_URL
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
 
