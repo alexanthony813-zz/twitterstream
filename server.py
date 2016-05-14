@@ -6,7 +6,7 @@ from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
 from bson.son import SON
 import requests
-from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI
 is_prod = os.environ.get('IS_HEROKU', None)
 
 
@@ -19,12 +19,12 @@ def in_circle(center_x, center_y, radius, tweet_coords):
 def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
-    if is_prod:
-        MONGO_URL = MONGO_PROD_URL
+    if not is_prod:
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
+        connection = MongoClient(MONGO_GOLD_URI, max_pool_size=50, waitQueueMultiple=10)
+    else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
-
-    connection = MongoClient(MONGO_URL,27017, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient(MONGO_GOLD_URI,MONGO_DEV_PORT, max_pool_size=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 

@@ -6,7 +6,8 @@ api_asecret = 'Fct3KwbH7HDdQah1byXfeP3yDWk7eaLStnuAIJxY9Ej8M'
 MONGO_DEV_URL = 'localhost'
 MONGO_DEV_PORT = 27017
 MONGO_PROD_URL = 'mongodb://heroku_tx52tt9z:sj3tm7t0fc290185h4u0e1r2ns@ds041144.mlab.com:41144/heroku_tx52tt9z'
-MONGOHQ_URL = 'mongodb://heroku:y1xCZHevVcnslAkFkIldT5tooj9qxJuiXmVNScZCKLxISvhI7-6CMZZRWADRR46cnSEakHksfJ_d4yJ3C06-Bg@candidate.18.mongolayer.com:11532,candidate.33.mongolayer.com:11226/app50799982'
+MONGOHQ_URL = 'mongodb://heroku:y1xCZHevVcnslAkFkIldT5tooj9qxJuiXmVNScZCKLxISvhI7-6CMZZRWADRR46cnSEakHksfJ_d4yJ3C06-Bg@candidate.18.mongolayer.com:11532,candidate.33.mongolayer.com:11226/app50799982MO'
+MONGO_GOLD_URI = 'mongodb://heroku_dt491zn4:27bmsuihppoi2quuu44sj1d08g@ds023432.mlab.com:23432/heroku_dt491zn4'
 
 REDIS_DEV_URL = 'localhost'
 REDIS_DEV_PORT = 6379
