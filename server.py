@@ -6,7 +6,7 @@ from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
 from bson.son import SON
 import requests
-from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
 
 
@@ -21,7 +21,7 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
-        connection = MongoClient(MONGOHQ_URL, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient(MONGO_GOLD_URI, max_pool_size=50, waitQueueMultiple=10)
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient(MONGO_URL,MONGO_DEV_PORT, max_pool_size=50, waitQueueMultiple=10)
