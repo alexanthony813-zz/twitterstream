@@ -8,15 +8,21 @@ import rq
 import nltk
 from textblob import TextBlob
 from controllers import sent_analysis
-from config import api_ckey, api_csecret, api_atoken, api_asecret
+from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
+import os
 
+# might have to change this to
 ckey = api_ckey
 csecret = api_csecret
 atoken = api_atoken
 asecret = api_asecret
 
-# might have to deploy this
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
+PRODUCTION_URL = os.environ.get('REDIS_URL')
+if PRODUCTION_URL:
+  r = redis.from_url(host=PRODUCTION_URL, port=REDIS_PROD_PORT, db=0)
+else:
+  r = redis.StrictRedis(host=REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
+
 q = rq.Queue(connection=r)
 
 

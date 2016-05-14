@@ -6,6 +6,8 @@ from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
 from bson.son import SON
 import requests
+from config import MONGO_DEV_URL, MONGO_DEV_PORT
+is_prod = os.environ.get('IS_HEROKU', None)
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
@@ -14,7 +16,12 @@ def in_circle(center_x, center_y, radius, tweet_coords):
     return square_dist <= radius ** 2
 
 def connect():
-    connection = MongoClient('localhost',27017, maxPoolSize=50, waitQueueMultiple=10)
+    # refactor with ternary
+    MONGO_URL = os.environ.get('MONGO_URL')
+    if not MONGO_URL:
+        MONGO_URL = MONGO_DEV_URL
+
+    connection = MongoClient(MONGO_URL,27017, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
@@ -37,7 +44,6 @@ def process_aggregate_response(aggregate_polarity, sample_size):
 app = Flask(__name__)
 handle = connect()
 handle.tweets.create_index([("coords", GEO2D)])
-
 
 @app.route("/", methods=['GET'])
 def index():
@@ -66,5 +72,7 @@ def get_sentiment(lat, lon, km_radius):
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
-
-    app.run(host='localhost', port=port, debug=True, threaded=True)
+    if is_prod:
+        app.run(host='0.0.0.0', port=port)
+    else:
+        app.run(host='localhost', port=port, debug=True, threaded=True)
