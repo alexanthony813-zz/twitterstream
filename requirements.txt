@@ -1,4 +1,4 @@
 rq
 redis
 texblob
-
+Flask-Heroku-RQify>=0.1

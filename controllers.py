@@ -18,7 +18,8 @@ def sent_analysis(tweet):
     text = tweet['text']
     blob = TextBlob(u'%s' % tweet['text'])
     sentiment = blob.sentiment
-    tweet['analysis'] = sentiment
+    tweet['polarity'] = sentiment.polarity
+    tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
     db.tweets.insert_one(tweet)
 

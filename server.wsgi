@@ -1,3 +1,3 @@
 import sys
 sys.path.insert(0, '/var/www/demo')
-from index import app as application
+from server import app as application

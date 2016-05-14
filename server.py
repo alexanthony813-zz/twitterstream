@@ -18,6 +18,22 @@ def connect():
     handle = connection['tweets']
     return handle
 
+def process_aggregate_response(aggregate_polarity, sample_size):
+    # have to iterate to get first, and only, aggregate average value...break out into helper
+    for result in aggregate_polarity:
+        average_polarity = result['avgPolarity']
+        most_positive_tweet = handle.tweets.find_one({'polarity': result['mostPositive']})
+        most_negative_tweet = handle.tweets.find_one({'polarity': result['mostNegative']})
+        most_positive_coordinates = dumps(most_positive_tweet['coords'])
+        most_positive_text = dumps(most_positive_tweet['text'])
+        most_negative_coordinates = dumps(most_negative_tweet['coords'])
+        most_negative_text = dumps(most_negative_tweet['text'])
+        most_negative = dumps({'text': most_negative_text, 'coordinates': most_negative_coordinates})
+        most_positive = dumps({'text': most_positive_text, 'coordinates': most_positive_coordinates})
+    else:
+        return dumps({'tweets': sample_size, 'average_polarity': average_polarity, 'most_positive': most_positive, 'most_negative': most_negative})
+
+
 app = Flask(__name__)
 handle = connect()
 handle.tweets.create_index([("coords", GEO2D)])
@@ -29,38 +45,23 @@ def index():
 
 @app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
 def get_sentiment(lat, lon, km_radius):
-    response = {}
 
     # TODO add form control so server doesn't crash for invalid coords
     lat = float(lat)
     lon = float(lon)
     degree_radius = (int(km_radius)/111.2)
 
-    query = {"coords" : SON([("$near", [lat, lon]), ("$maxDistance", degree_radius)])}
+    query = {"coords": SON([("$near", [lat, lon]), ("$maxDistance", degree_radius)])}
     tweets = handle.tweets.find(query)
-    response['tweets'] = tweets.count() if tweets.count() != 0 else "None tweets available for this location at this time"
+    sample_size = tweets.count() if tweets.count() != 0 else "No tweets available for this location at this time"
 
     # use $geoNear here to get actual polarity values in that area, then use aggregator to average
     pipeline = [{"$geoNear": {"near": [lat, lon], "distanceField": "coords", "maxDistance": degree_radius}}, {"$group": {"_id": None, "avgPolarity": {"$avg": "$polarity"}, "mostPositive": {"$max": "$polarity"}, "mostNegative": {"$min": "$polarity"}}}]
     aggregate_polarity = handle.tweets.aggregate(pipeline)
 
-
-    # have to iterate to get first, and only, aggregate average value
-    for agg in aggregate_polarity:
-        response['average_polarity'] = agg['avgPolarity']
-        response['most_positive'] = agg['mostPositive']
-        response['most_positive_text'] = dumps(handle.tweets.find_one({"polarity":response['most_positive']})['text'])
-        response['most_negative'] = agg['mostNegative']
-        response['most_negative_text'] = dumps(handle.tweets.find_one({"polarity":response['most_negative']})['text'])
-
-
-    # user iterator
-    json_tweets = []
-
-    for tweet in tweets:
-        json_tweets.append(dumps(tweet))
-
-    return jsonify(response)
+    response = process_aggregate_response(aggregate_polarity, sample_size)
+    print '\n-----------------------------------\n', response
+    return response
 
 # Remove the "debug=True" for production
 if __name__ == '__main__':

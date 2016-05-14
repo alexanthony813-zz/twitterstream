@@ -9,8 +9,6 @@ import nltk
 from textblob import TextBlob
 from controllers import sent_analysis
 
-print sent_analysis
-
 ckey = 'jEvzsLn3hcZogmtOVvfP0Gx0A'
 csecret = 'uWClVOYHuBIoV7nOdItRIeFgRUtrms9jk0OesT9sOWWk3WOd6W'
 atoken = '730880914692046848-ZtqJuUTqhbcPfbeW1iKWB8DqTRWxSlr'
