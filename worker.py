@@ -1,12 +1,33 @@
-from time import sleep
-from multiprocessing import Pool
+from pymongo import MongoClient
+from textblob import TextBlob
+import json
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
+import os
 
-def start_func_for_processes(n):
-  sleep(0.5)
-  result_sent_back_to_parent = n*n
-  return result_sent_back_to_parent
+MONGO_URL = os.environ.get('MONGO_URL')
+if not MONGO_URL:
+  MONGO_URL = MONGO_DEV_URL
 
-if __name__ == '__main__':
-  with Pool(processes=5) as p:
-    results = p.map(start_func_for_processes, range(200), chunksize=10)
-  print results
+conn = MongoClient(MONGO_URL, MONGO_DEV_PORT)
+db = conn.tweets
+
+def parse_cords(coordstring):
+    coords = coordstring.split(',')
+    x_beg_slice = coords[1].index('[')+1
+    x = float(coords[1][x_beg_slice:])
+    y_end_slice = coords[2].index(']')
+    y = float(coords[2][:y_end_slice])
+    coords = [x, y]
+    return coords
+
+def sent_analysis(tweet):
+    text = tweet['text']
+    blob = TextBlob(u'%s' % tweet['text'])
+    sentiment = blob.sentiment
+    tweet['polarity'] = sentiment.polarity
+    tweet['subjectivity'] = sentiment.subjectivity
+    tweet['coords'] = parse_cords(tweet['coords'])
+    db.tweets.insert_one(tweet)
+
+if __name__=='__main__':
+  main()
