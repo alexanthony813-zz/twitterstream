@@ -20,11 +20,11 @@ def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
     if is_prod:
-        MONGO_URL = MONGOHQ_URL
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
+        connection = MongoClient(MONGOHQ_URL, max_pool_size=50, waitQueueMultiple=10)
+    else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
-
-    connection = MongoClient(MONGO_URL,27017, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient(MONGO_URL,MONGO_DEV_PORT, max_pool_size=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
