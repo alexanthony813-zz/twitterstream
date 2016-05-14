@@ -24,14 +24,14 @@ def process_aggregate_response(aggregate_polarity, sample_size):
         average_polarity = result['avgPolarity']
         most_positive_tweet = handle.tweets.find_one({'polarity': result['mostPositive']})
         most_negative_tweet = handle.tweets.find_one({'polarity': result['mostNegative']})
-        most_positive_coordinates = dumps(most_positive_tweet['coords'])
-        most_positive_text = dumps(most_positive_tweet['text'])
-        most_negative_coordinates = dumps(most_negative_tweet['coords'])
-        most_negative_text = dumps(most_negative_tweet['text'])
-        most_negative = dumps({'text': most_negative_text, 'coordinates': most_negative_coordinates})
-        most_positive = dumps({'text': most_positive_text, 'coordinates': most_positive_coordinates})
+        most_positive_coordinates = most_positive_tweet['coords']
+        most_positive_text = most_positive_tweet['text']
+        most_negative_coordinates = most_negative_tweet['coords']
+        most_negative_text = most_negative_tweet['text']
+        most_negative = {'text': most_negative_text, 'coordinates': most_negative_coordinates}
+        most_positive = {'text': most_positive_text, 'coordinates': most_positive_coordinates}
     else:
-        return dumps({'tweets': sample_size, 'average_polarity': average_polarity, 'most_positive': most_positive, 'most_negative': most_negative})
+        return {'tweets': sample_size, 'average_polarity': average_polarity, 'most_positive': most_positive, 'most_negative': most_negative}
 
 
 app = Flask(__name__)
@@ -60,8 +60,7 @@ def get_sentiment(lat, lon, km_radius):
     aggregate_polarity = handle.tweets.aggregate(pipeline)
 
     response = process_aggregate_response(aggregate_polarity, sample_size)
-    print '\n-----------------------------------\n', response
-    return response
+    return jsonify(response)
 
 # Remove the "debug=True" for production
 if __name__ == '__main__':
