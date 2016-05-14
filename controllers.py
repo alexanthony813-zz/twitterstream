@@ -1,8 +1,14 @@
 from pymongo import MongoClient
 from textblob import TextBlob
 import json
+from config import MONGO_DEV_DB, MONGO_DEV_PORT, MONGO_URL
+import os
 
-conn = MongoClient('localhost', 27017)
+MONGO_URL = os.environ.get('MONGO_URL')
+if not MONGO_URL:
+  MONGO_URL = MONGO_DEV_DB
+
+conn = MongoClient(MONGO_URL, MONGO_DEV_PORT)
 db = conn.tweets
 
 def parse_cords(coordstring):
