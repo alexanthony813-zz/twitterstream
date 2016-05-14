@@ -14,7 +14,7 @@ def in_circle(center_x, center_y, radius, tweet_coords):
     return square_dist <= radius ** 2
 
 def connect():
-# Substitute the 5 pieces of information 
+# Substitute the 5 pieces of information
     connection = MongoClient('localhost',27017, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
@@ -27,47 +27,20 @@ handle.tweets.create_index([("coords", GEO2D)])
 def index():
     return render_template('index.html')
 
-# @app.route("/write", methods=['POST'])
-# def write():
-#     userinput = request.form.get("userinput")
-#     oid = handle.mycollection.insert({"message":userinput})
-#     return redirect ("/")
-
 @app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
 def get_sentiment(lat, lon, km_radius):
-    # coord = request.args.get('coord')
-    # make circle with these coordinates
     lat = float(lat)
     lon = float(lon)
     degree_radius = (int(km_radius)/111.2)
 
-    # perform aggregate by ranges of lat and long that would be within the circle
-    # pipeline = [{ "$geoNear" : {
-    #              "near" : { "type" : "Point", "coordinates" : [lat, lon]},
-    #              "distanceField": "dist.calculated",
-    #              }}]
-    # pipeline = [('geoNear', 'places'), ('near', [lat, lon])]
-
-                 # "maxDistance" :  max_distance,
-                 # "num" : 100,
-                 # "spherical" : True
     print 'hellur', degree_radius
     query = {"coords" : SON([("$near", [lat, lon]), ("$maxDistance", degree_radius)])}
-    # tweets = handle.tweets.find({"coords": [{"$near": [lat, lon]}, {"$max_distance" : degree_radius}]})
     tweets = handle.tweets.find(query)
 
-    # .limit(degree_radius)
     json_tweets = []
 
     for tweet in tweets:
-        # refactored to use aggregate in tweets query
-        print tweet
         json_tweets.append(dumps(tweet))
-        # if in_circle(lat, lon, radius, tweet['coords']):
-
-    # for tweet in json_tweets:
-        # print tweet['coords']
-        # print type(parse_cords(tweet['coords'])), parse_cords(tweet['coords'])
 
     return jsonify({'tweets':json_tweets})
 
