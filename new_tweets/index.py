@@ -4,6 +4,14 @@ from pymongo import MongoClient
 # Set the path
 from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
+from bson.son import SON
+import requests
+
+def in_circle(center_x, center_y, radius, tweet_coords):
+    x = tweet_coords[0]
+    y = tweet_coords[1]
+    square_dist = (center_x - x) ** 2 + (center_y - y) ** 2
+    return square_dist <= radius ** 2
 
 def connect():
 # Substitute the 5 pieces of information you got when creating
@@ -26,13 +34,25 @@ def index():
 #     oid = handle.mycollection.insert({"message":userinput})
 #     return redirect ("/")
 
-@app.route("/info", methods=['GET'])
-def info():
-    tweets = handle.tweets.find()
+@app.route("/get_sentiment/<lat>/<lon>/<radius>", methods=['GET'])
+def info(lat, lon, radius):
+    # coord = request.args.get('coord')
+    # make circle with these coordinates
+    lat = float(lat)
+    lon = float(lon)
+    radius = float(radius)
+
+    # perform aggregate by ranges of lat and long that would be within the circle
+    tweets = handle.tweets.find(filter=SON({}))
     json_tweets = []
 
     for tweet in tweets:
+        print in_circle(lat, lon, radius, tweet['coords'])
         json_tweets.append(dumps(tweet))
+
+    # for tweet in json_tweets:
+        # print tweet['coords']
+        # print type(parse_cords(tweet['coords'])), parse_cords(tweet['coords'])
 
     return jsonify({'tweets':json_tweets})
 
