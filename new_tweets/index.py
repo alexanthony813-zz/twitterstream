@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import os
-from pymongo import MongoClient
+from pymongo import MongoClient, GEO2D
 # Set the path
 from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
@@ -14,15 +14,14 @@ def in_circle(center_x, center_y, radius, tweet_coords):
     return square_dist <= radius ** 2
 
 def connect():
-# Substitute the 5 pieces of information you got when creating
-# the Mongo DB Database (underlined in red in the screenshots)
-# Obviously, do not store your password as plaintext in practice
+# Substitute the 5 pieces of information 
     connection = MongoClient('localhost',27017, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
 app = Flask(__name__)
 handle = connect()
+handle.tweets.create_index([("coords", GEO2D)])
 
 @app.route("/", methods=['GET'])
 def index():
@@ -40,15 +39,26 @@ def info(lat, lon, radius):
     # make circle with these coordinates
     lat = float(lat)
     lon = float(lon)
-    radius = float(radius)
+    radius = int(radius)
 
     # perform aggregate by ranges of lat and long that would be within the circle
-    tweets = handle.tweets.find(filter=SON({}))
+    # pipeline = [{ "$geoNear" : {
+    #              "near" : { "type" : "Point", "coordinates" : [lat, lon]},
+    #              "distanceField": "dist.calculated",
+    #              }}]
+    # pipeline = [('geoNear', 'places'), ('near', [lat, lon])]
+
+                 # "maxDistance" :  max_distance,
+                 # "num" : 100,
+                 # "spherical" : True
+    print 'hellur',lat, lon, radius
+    tweets = handle.tweets.find({"coords": {"$near": [lat, lon]}}).limit(radius)
     json_tweets = []
 
     for tweet in tweets:
-        print in_circle(lat, lon, radius, tweet['coords'])
+        # refactored to use aggregate in tweets query
         json_tweets.append(dumps(tweet))
+        # if in_circle(lat, lon, radius, tweet['coords']):
 
     # for tweet in json_tweets:
         # print tweet['coords']
