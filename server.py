@@ -6,11 +6,9 @@ from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
 from bson.son import SON
 import requests
-from config import MONGO_DEV_URL, MONGO_DEV_PORT
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL
 is_prod = os.environ.get('IS_HEROKU', None)
 
-# Bind to PORT if defined, otherwise default to 5000.
-port = int(os.environ.get('PORT', 5000))
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
@@ -22,10 +20,11 @@ def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
     if is_prod:
-        MONGO_URL = os.environ.get('PROD_MONGODB')
+        MONGO_URL = MONGO_PROD_URL
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
+        print 'not mongo\n\n\n\n\n\n\n\n___________________________'
 
-    connection = MongoClient(MONGO_URL,port, max_pool_size=50, waitQueueMultiple=10)
+    connection = MongoClient(MONGO_URL,27017, max_pool_size=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
@@ -75,8 +74,10 @@ def get_sentiment(lat, lon, km_radius):
 
 # Remove the "debug=True" for production
 if __name__ == '__main__':
+    # Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get('PORT', 27017))
     if is_prod:
         print 'we\'re doin it live!'
-        app.run(host='rocky-atoll-27122.herokuapp.com', port=port)
+        app.run(host='0.0.0.0', port=port)
     else:
         app.run(host='localhost', port=port, debug=True, threaded=True)
