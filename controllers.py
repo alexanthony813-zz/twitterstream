@@ -1,12 +1,12 @@
 from pymongo import MongoClient
 from textblob import TextBlob
 import json
-from config import MONGO_DEV_DB, MONGO_DEV_PORT, MONGO_URL
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
 import os
 
 MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
-  MONGO_URL = MONGO_DEV_DB
+  MONGO_URL = MONGO_DEV_URL
 
 conn = MongoClient(MONGO_URL, MONGO_DEV_PORT)
 db = conn.tweets
