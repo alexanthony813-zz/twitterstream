@@ -1,3 +1,3 @@
-web: gunicorn server.py && python consumer.py
+web: gunicorn server.py
 worker: python worker.py
 
