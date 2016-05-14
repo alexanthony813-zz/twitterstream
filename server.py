@@ -20,9 +20,10 @@ def in_circle(center_x, center_y, radius, tweet_coords):
 
 def connect():
     # refactor with ternary
-    MONGO_URL = os.environ.get('MONGO_URL')
-    if not is_prod:
-        MONGO_URL = MONGO_DEV_URL
+    MONGO_URL = MONGO_DEV_URL
+    if is_prod:
+        MONGO_URL = os.environ.get('PROD_MONGODB')
+        print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
 
     connection = MongoClient(MONGO_URL,port, max_pool_size=50, waitQueueMultiple=10)
     handle = connection['tweets']
@@ -78,4 +79,4 @@ if __name__ == '__main__':
         print 'we\'re doin it live!'
         app.run(host='rocky-atoll-27122.herokuapp.com', port=port)
     else:
-        app.run(host='test', port=port, debug=True, threaded=True)
+        app.run(host='localhost', port=port, debug=True, threaded=True)
