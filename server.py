@@ -21,7 +21,7 @@ def connect():
     if not MONGO_URL:
         MONGO_URL = MONGO_DEV_URL
 
-    connection = MongoClient(MONGO_URL,27017, maxPoolSize=50, waitQueueMultiple=10)
+    connection = MongoClient(MONGO_URL,27017, max_pool_size=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
