@@ -76,4 +76,5 @@ if __name__ == '__main__':
     if is_prod:
         app.run(host='localhost', port=port, debug=True, threaded=True)
     else:
-        app.run(host='0.0.0.0', port=port)
+        print 'we\'re doin it live!'
+        app.run(host='rocky-atoll-27122.herokuapp.com', port=port)
