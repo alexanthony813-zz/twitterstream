@@ -7,7 +7,7 @@ import redis
 import rq
 import nltk
 from textblob import TextBlob
-from controllers import sent_analysis
+from worker import sent_analysis
 from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
 import os
 
