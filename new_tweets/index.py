@@ -49,7 +49,10 @@ def get_sentiment(lat, lon, km_radius):
     for agg in aggregate_polarity:
         response['average_polarity'] = agg['avgPolarity']
         response['most_positive'] = agg['mostPositive']
+        response['most_positive_text'] = dumps(handle.tweets.find_one({"polarity":response['most_positive']})['text'])
         response['most_negative'] = agg['mostNegative']
+        response['most_negative_text'] = dumps(handle.tweets.find_one({"polarity":response['most_negative']})['text'])
+
 
     # user iterator
     json_tweets = []
