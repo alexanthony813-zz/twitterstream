@@ -18,7 +18,7 @@ def in_circle(center_x, center_y, radius, tweet_coords):
 def connect():
     # refactor with ternary
     MONGO_URL = os.environ.get('MONGO_URL')
-    if not MONGO_URL:
+    if is_prod:
         MONGO_URL = MONGO_DEV_URL
 
     connection = MongoClient(MONGO_URL,27017, max_pool_size=50, waitQueueMultiple=10)
@@ -73,6 +73,6 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     if is_prod:
-        app.run(host='0.0.0.0', port=port)
-    else:
         app.run(host='localhost', port=port, debug=True, threaded=True)
+    else:
+        app.run(host='0.0.0.0', port=port)
