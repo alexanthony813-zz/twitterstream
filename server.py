@@ -55,11 +55,12 @@ def index():
 @app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
 def get_sentiment(lat, lon, km_radius):
 
-    # TODO add form control so server doesn't crash for invalid coords
+    # TD: add form control so server doesn't crash for invalid coords
     lat = float(lat)
     lon = float(lon)
     degree_radius = (int(km_radius)/111.2)
 
+    # TD: reformat to use agg
     query = {"coords": SON([("$near", [lat, lon]), ("$maxDistance", degree_radius)])}
     tweets = handle.tweets.find(query)
     sample_size = tweets.count() if tweets.count() != 0 else "No tweets available for this location at this time"
@@ -74,7 +75,7 @@ def get_sentiment(lat, lon, km_radius):
 # Remove the "debug=True" for production
 if __name__ == '__main__':
     if is_prod:
-        app.run(host='localhost', port=port, debug=True, threaded=True)
-    else:
         print 'we\'re doin it live!'
         app.run(host='rocky-atoll-27122.herokuapp.com', port=port)
+    else:
+        app.run(host='localhost', port=port, debug=True, threaded=True)
