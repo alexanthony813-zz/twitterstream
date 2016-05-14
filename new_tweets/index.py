@@ -14,7 +14,6 @@ def in_circle(center_x, center_y, radius, tweet_coords):
     return square_dist <= radius ** 2
 
 def connect():
-# Substitute the 5 pieces of information
     connection = MongoClient('localhost',27017, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
@@ -23,26 +22,42 @@ app = Flask(__name__)
 handle = connect()
 handle.tweets.create_index([("coords", GEO2D)])
 
+
 @app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
 
 @app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
 def get_sentiment(lat, lon, km_radius):
+    response = {}
+
+    # TODO add form control so server doesn't crash for invalid coords
     lat = float(lat)
     lon = float(lon)
     degree_radius = (int(km_radius)/111.2)
 
-    print 'hellur', degree_radius
     query = {"coords" : SON([("$near", [lat, lon]), ("$maxDistance", degree_radius)])}
     tweets = handle.tweets.find(query)
+    response['tweets'] = tweets.count() if tweets.count() != 0 else "None tweets available for this location at this time"
 
+    # use $geoNear here to get actual polarity values in that area, then use aggregator to average
+    pipeline = [{"$geoNear": {"near": [lat, lon], "distanceField": "coords", "maxDistance": degree_radius}}, {"$group": {"_id": None, "avgPolarity": {"$avg": "$polarity"}, "mostPositive": {"$max": "$polarity"}, "mostNegative": {"$min": "$polarity"}}}]
+    aggregate_polarity = handle.tweets.aggregate(pipeline)
+
+
+    # have to iterate to get first, and only, aggregate average value
+    for agg in aggregate_polarity:
+        response['average_polarity'] = agg['avgPolarity']
+        response['most_positive'] = agg['mostPositive']
+        response['most_negative'] = agg['mostNegative']
+
+    # user iterator
     json_tweets = []
 
     for tweet in tweets:
         json_tweets.append(dumps(tweet))
 
-    return jsonify({'tweets':json_tweets})
+    return jsonify(response)
 
 # Remove the "debug=True" for production
 if __name__ == '__main__':
