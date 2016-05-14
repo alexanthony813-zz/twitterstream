@@ -8,6 +8,7 @@ from bson.son import SON
 import requests
 from config import MONGO_DEV_URL, MONGO_DEV_PORT
 is_prod = os.environ.get('IS_HEROKU', None)
+port = int(os.environ.get('PORT', 5000))
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
@@ -21,7 +22,7 @@ def connect():
     if is_prod:
         MONGO_URL = MONGO_DEV_URL
 
-    connection = MongoClient(MONGO_URL,27017, max_pool_size=50, waitQueueMultiple=10)
+    connection = MongoClient(MONGO_URL,port, max_pool_size=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
@@ -71,7 +72,6 @@ def get_sentiment(lat, lon, km_radius):
 # Remove the "debug=True" for production
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
     if is_prod:
         app.run(host='localhost', port=port, debug=True, threaded=True)
     else:
