@@ -19,7 +19,7 @@ def in_circle(center_x, center_y, radius, tweet_coords):
 def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
-    if is_prod:
+    if not is_prod:
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
         connection = MongoClient(MONGO_PROD_URL, max_pool_size=50, waitQueueMultiple=10)
     else:
