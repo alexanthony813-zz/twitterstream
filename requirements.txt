@@ -5,6 +5,7 @@ flask-mongoengine==0.7.5
 Flask-RQ==0.2
 Flask-Script==2.0.5
 Flask-WTF==0.12
+gunicorn==19.5.0
 itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
@@ -18,8 +19,7 @@ requests==2.10.0
 requests-oauthlib==0.6.1
 rq==0.6.0
 six==1.10.0
-textblob==0.11.1
+textblob==0.12.0.dev0
 tweepy==3.5.0
 Werkzeug==0.11.9
 WTForms==2.1
-
