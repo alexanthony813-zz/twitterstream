@@ -1,8 +1,14 @@
 from pymongo import MongoClient
 from textblob import TextBlob
 import json
+from config import MONGO_DEV_DB, MONGO_DEV_PORT, MONGO_URL
+import os
 
-conn = MongoClient('localhost', 27017)
+MONGO_URL = os.environ.get('MONGO_URL')
+if not MONGO_URL:
+  MONGO_URL = MONGO_DEV_DB
+
+conn = MongoClient(MONGO_URL, MONGO_DEV_PORT)
 db = conn.tweets
 
 def parse_cords(coordstring):
@@ -18,7 +24,8 @@ def sent_analysis(tweet):
     text = tweet['text']
     blob = TextBlob(u'%s' % tweet['text'])
     sentiment = blob.sentiment
-    tweet['analysis'] = sentiment
+    tweet['polarity'] = sentiment.polarity
+    tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
     db.tweets.insert_one(tweet)
 

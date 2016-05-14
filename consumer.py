@@ -8,13 +8,12 @@ import rq
 import nltk
 from textblob import TextBlob
 from controllers import sent_analysis
+from config import api_ckey, api_csecret, api_atoken, api_asecret
 
-print sent_analysis
-
-ckey = 'jEvzsLn3hcZogmtOVvfP0Gx0A'
-csecret = 'uWClVOYHuBIoV7nOdItRIeFgRUtrms9jk0OesT9sOWWk3WOd6W'
-atoken = '730880914692046848-ZtqJuUTqhbcPfbeW1iKWB8DqTRWxSlr'
-asecret = 'Fct3KwbH7HDdQah1byXfeP3yDWk7eaLStnuAIJxY9Ej8M'
+ckey = api_ckey
+csecret = api_csecret
+atoken = api_atoken
+asecret = api_asecret
 
 # might have to deploy this
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -51,6 +50,7 @@ class listener(StreamListener):
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
     # put in sentiment analysis callback rather than str(i)
     q.enqueue(sent_analysis, tweet, timeout=20)
+    print 'q>>>>>>>>>>>>>>>>>>>>>>>>>>\n',q.jobs
     return True
 
   def on_error(self, status):
