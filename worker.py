@@ -18,7 +18,10 @@ def parse_cords(coordstring):
 
 def sent_analysis(tweet):
     text = tweet['text']
-    blob = TextBlob(u'%s' % tweet['text'])
+    try:
+        blob = TextBlob(u'%s' % tweet['text'])
+    except:
+        return
     sentiment = blob.sentiment
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
