@@ -22,7 +22,10 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         global connection
-        os.fork()
+        if os.fork():
+            os.wait()
+        else:
+            os.fork()
         connection = MongoClient(uri, port=23442, maxPoolSize=10, waitQueueMultiple=10, connect=False)
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=10, waitQueueMultiple=10, connect=False)
