@@ -1,2 +1,2 @@
 web: python server.py;
-worker: python consumer.py;
+worker: python -u consumer.py;
