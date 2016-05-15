@@ -21,3 +21,6 @@ def sent_analysis(tweet):
     tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
     handle.tweets.insert_one(tweet)
+
+if __name__ == '__main__':
+    main()
