@@ -4,7 +4,7 @@ import json
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
 import os
 from server import connection
-
+print 'in worker\n'
 # MONGO_URL = os.environ.get('MONGO_URL')
 # if not MONGO_URL:
 #   MONGO_URL = MONGO_DEV_URL

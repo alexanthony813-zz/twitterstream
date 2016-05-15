@@ -10,7 +10,7 @@ from textblob import TextBlob
 from worker import sent_analysis
 from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
 import os
-
+print 'consuming\n'
 # might have to change this to
 ckey = api_ckey
 csecret = api_csecret

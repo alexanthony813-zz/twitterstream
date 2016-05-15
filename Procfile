@@ -1,1 +1,1 @@
-web: python server.py
+web: python consumer.py && rq worker
