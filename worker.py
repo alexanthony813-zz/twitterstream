@@ -21,4 +21,4 @@ def sent_analysis(tweet):
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
-    handle.tweets.insert_one([tweet])
+    handle.tweets.insert_one(tweet)
