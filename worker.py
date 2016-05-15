@@ -1,4 +1,3 @@
-from pymongo import MongoClient
 from textblob import TextBlob
 import json
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
