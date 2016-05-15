@@ -29,10 +29,16 @@ def sent_analysis(tweet):
     tweet['coords'] = parse_cords(tweet['coords'])
     handle.tweets.insert_one(tweet)
 
-if __name__ == '__main__':
+def watcher():
     child = os.fork()
     if child == 0:
         return
     try:
         os.wait()
+    except:
+        print 'waiting'
+        socket.getaddrinfo('mongodb.org', 80)
     sys.exit()
+
+if __name__ == '__main__':
+    watcher()
