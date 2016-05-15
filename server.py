@@ -9,6 +9,11 @@ import requests
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
 
+# string = r'mongodb://heroku_0p1s62cb:aev0huua42o4qjnrnen2ilj3a3@ds023442.mlab.com:23442/heroku_0p1s62cb'
+string = os.environ.get('MONGODB_URI')
+print '>>>>>>>>>>>>>>\n',string
+uri = string.rsplit()[0]
+print '>>>>>>>>>>>>>>>',uri
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
@@ -20,11 +25,11 @@ def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
-        print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
-        connection = MongoClient('mongodb://alex13:seal13@ds023432.mlab.com:23432/heroku_dt491zn4', max_pool_size=50, waitQueueMultiple=10)
+        print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n_____________________________'
+        connection = MongoClient(uri, max_pool_size=50, waitQueueMultiple=10)
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
-        connection = MongoClient('mongodb://alex13:seal13@ds023432.mlab.com:23432/heroku_dt491zn4', MONGO_DEV_PORT, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient(uri, MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
