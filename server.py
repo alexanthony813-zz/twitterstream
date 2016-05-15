@@ -29,7 +29,7 @@ def connect():
         connection = MongoClient(uri, max_pool_size=50, waitQueueMultiple=10)
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
-        connection = MongoClient(uri, MONGO_DEV_PORT, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient(uri, MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
