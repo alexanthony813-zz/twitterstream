@@ -5,14 +5,16 @@ import os
 from server import handle
 
 def parse_cords(coordstring):
-    coords = coordstring.split(',')
-    print type(coords), coords
-    x_beg_slice = coords[1].index('[')+1
-    x = float(coords[1][x_beg_slice:])
-    y_end_slice = coords[2].index(']')
-    y = float(coords[2][:y_end_slice])
-    coords = [x, y]
-    return coords
+    try:
+        coords = coordstring.split(',')
+        x_beg_slice = coords[1].index('[')+1
+        x = float(coords[1][x_beg_slice:])
+        y_end_slice = coords[2].index(']')
+        y = float(coords[2][:y_end_slice])
+        coords = [x, y]
+        return coords
+    except:
+        return []
 
 def sent_analysis(tweet):
     text = tweet['text']
