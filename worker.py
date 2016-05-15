@@ -1,30 +1,43 @@
-from pymongo import MongoClient
 from textblob import TextBlob
 import json
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
 import os
-
-MONGO_URL = os.environ.get('MONGO_URL')
-if not MONGO_URL:
-  MONGO_URL = MONGO_DEV_URL
-
-conn = MongoClient(MONGO_URL, MONGO_DEV_PORT, connect=False)
-db = conn.tweets
+from server import handle
+import sys
 
 def parse_cords(coordstring):
-    coords = coordstring.split(',')
-    x_beg_slice = coords[1].index('[')+1
-    x = float(coords[1][x_beg_slice:])
-    y_end_slice = coords[2].index(']')
-    y = float(coords[2][:y_end_slice])
-    coords = [x, y]
-    return coords
+    try:
+        coords = coordstring.split(',')
+        x_beg_slice = coords[1].index('[')+1
+        x = float(coords[1][x_beg_slice:])
+        y_end_slice = coords[2].index(']')
+        y = float(coords[2][:y_end_slice])
+        coords = [x, y]
+        return coords
+    except:
+        return []
 
 def sent_analysis(tweet):
     text = tweet['text']
-    blob = TextBlob(u'%s' % tweet['text'])
+    try:
+        blob = TextBlob(u'%s' % tweet['text'])
+    except:
+        return
     sentiment = blob.sentiment
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
-    db.tweets.insert_one(tweet)
+    handle.tweets.insert_one(tweet)
+
+def watcher():
+    child = os.fork()
+    if child == 0:
+        return
+    try:
+        os.wait()
+    except:
+        socket.getaddrinfo('mongodb.org', 80)
+    sys.exit()
+
+if __name__ == '__main__':
+    watcher()

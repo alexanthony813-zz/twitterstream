@@ -8,20 +8,19 @@ import rq
 import nltk
 from textblob import TextBlob
 from worker import sent_analysis
-from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
+from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_TO_GO, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
 import os
-
-# might have to change this to
+from time import sleep
 ckey = api_ckey
 csecret = api_csecret
 atoken = api_atoken
 asecret = api_asecret
 
-PRODUCTION_URL = os.environ.get('REDIS_URL')
+PRODUCTION_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 if PRODUCTION_URL:
-  r = redis.from_url(host=PRODUCTION_URL, port=REDIS_PROD_PORT, db=0)
+  r = redis.from_url(PRODUCTION_URL, port=6379, db=0)
 else:
-  r = redis.StrictRedis(host=REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
+  r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
 q = rq.Queue(connection=r)
 
@@ -29,7 +28,6 @@ q = rq.Queue(connection=r)
 class listener(StreamListener):
 
   def on_data(self, data):
-    # also get geolocation, save to redis.
     json_data = json.loads(data)
 
     try:
@@ -54,10 +52,12 @@ class listener(StreamListener):
       return
 
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
-    # put in sentiment analysis callback rather than str(i)
-    q.enqueue(sent_analysis, tweet, timeout=20)
-    print 'q>>>>>>>>>>>>>>>>>>>>>>>>>>\n',q.jobs
-    return True
+    job = q.enqueue(sent_analysis, tweet)
+    sleep(2)
+    with rq.Connection(r):
+      global worker
+      worker = rq.Worker(q)
+      worker.work()
 
   def on_error(self, status):
     print status
@@ -65,5 +65,5 @@ class listener(StreamListener):
 auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 twitterStream = Stream(auth, listener())
-# basically using very common english words to track and filter out for language (en lue of proper firehose connection from Twitter)
+# basically using very common english words to track and filter out for language (instead of firehose connection from Twitter)
 twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
