@@ -10,6 +10,7 @@ from textblob import TextBlob
 from worker import sent_analysis
 from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_TO_GO, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
 import os
+from time import sleep
 ckey = api_ckey
 csecret = api_csecret
 atoken = api_atoken
@@ -21,7 +22,7 @@ if PRODUCTION_URL:
 else:
   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
-q = rq.Queue(connection=r)
+q = rq.Queue(connection=r, timeout=30)
 
 
 class listener(StreamListener):
@@ -53,6 +54,7 @@ class listener(StreamListener):
 
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
     q.enqueue(sent_analysis, tweet, timeout=20)
+    sleep(0.05)
     with rq.Connection(r):
       # reconfigure to use processes
       global worker
