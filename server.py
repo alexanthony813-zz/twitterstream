@@ -51,7 +51,7 @@ def process_aggregate_response(aggregate_polarity, sample_size):
 
 app = Flask(__name__)
 handle = connect()
-handle.tweets.createIndexes([("coords", GEO2D)])
+handle.tweets.create_indexes([("coords", GEO2D)])
 
 @app.route("/", methods=['GET'])
 def index():
