@@ -6,6 +6,7 @@ from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
 from bson.son import SON
 import requests
+from time import sleep
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
 string = 'ds023442.mlab.com:23442'
@@ -23,8 +24,8 @@ def connect():
     if not is_prod:
         global connection
         connection = MongoClient(uri, port=23442, maxPoolSize=10, waitQueueMultiple=10, connect=False)
-        # wait for the background (parent?) thread to drop the getadrinfo lock before forking
-        time.sleep(0.1)
+        # wait for the background (parent?) thread to drop the getaddrinfo lock before forking
+        sleep(0.1)
         if os.fork():
             os.wait()
         connection.admin.command('ping')
