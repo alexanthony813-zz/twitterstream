@@ -25,7 +25,7 @@ def connect():
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient('ds023442.mlab.com', port=023442, max_pool_size=50, waitQueueMultiple=10)
-    handle = connection['tweets']
+    handle = connection['heroku_0p1s62cb']
     handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
     return handle
 
