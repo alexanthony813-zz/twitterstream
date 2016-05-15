@@ -71,5 +71,6 @@ twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
 
 if __name__ == '__main__':
   with rq.Connection(r):
-    worker = rq.Worker(map(Queue, listen))
+    # reconfigure to use processes
+    worker = rq.Worker(map(rq.Queue, ['high', 'default', 'low']))
     worker.work()
