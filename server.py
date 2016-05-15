@@ -13,7 +13,7 @@ string = 'ds023442.mlab.com:23442'
 # print '>>>>>>>>>>>>>>\n',string
 uri = string.rsplit()[0]
 # print '>>>>>>>>>>>>>>>',uri
-print '\n here',os.environ.get('PORT')
+# print '\n here',os.environ.get('PORT')
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
@@ -83,7 +83,7 @@ def get_sentiment(lat, lon, km_radius):
 # Remove the "debug=True" for production
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT'))
+    port = int(os.environ.get('PORT', 46012))
     if not is_prod:
         app.run(host='0.0.0.0', port=port)
     else:
