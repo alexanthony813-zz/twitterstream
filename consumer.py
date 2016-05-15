@@ -53,8 +53,10 @@ class listener(StreamListener):
       return
 
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
-    q.enqueue(sent_analysis, tweet, timeout=20)
+    # took out short timeout
+    q.enqueue(sent_analysis, tweet)
     sleep(0.05)
+    print q
     with rq.Connection(r):
       # reconfigure to use processes
       global worker
