@@ -8,8 +8,8 @@ from bson.son import SON
 import requests
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
-# string = r'mongodb://heroku_0p1s62cb:aev0huua42o4qjnrnen2ilj3a3@ds023442.mlab.com:23442/heroku_0p1s62cb'
-string = 'ds023442.mlab.com:23442'
+string = r'mongodb://heroku_0p1s62cb:aev0huua42o4qjnrnen2ilj3a3@ds023442.mlab.com:23442/heroku_0p1s62cb'
+# string = 'ds023442.mlab.com:23442'
 # print '>>>>>>>>>>>>>>\n',string
 uri = string.rsplit()[0]
 # print '>>>>>>>>>>>>>>>',uri
@@ -25,6 +25,7 @@ def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
+        print 'Live>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n'
         global connection
         connection = MongoClient(uri, port=23442, maxPoolSize=50, waitQueueMultiple=10)
     else:
