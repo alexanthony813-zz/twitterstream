@@ -53,12 +53,12 @@ class listener(StreamListener):
 
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
     q.enqueue(sent_analysis, tweet, timeout=20)
-    with rq.Connection(r):
-      # reconfigure to use processes
-      global worker
-      worker = rq.Worker(q)
-      worker.work()
-    return True
+    if __name__ == '__main__':
+      with rq.Connection(r):
+        # reconfigure to use processes
+        global worker
+        worker = rq.Worker(q)
+        worker.work()
 
   def on_error(self, status):
     print status
