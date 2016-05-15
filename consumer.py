@@ -62,7 +62,7 @@ class listener(StreamListener):
       print 'working'
       # reconfigure to use processes
       global worker
-      worker = rq.Worker(map(q,['high', 'default', 'low']))
+      worker = rq.Worker(q)
       worker.work()
     print 'q__________________________________\n', q
     return True
