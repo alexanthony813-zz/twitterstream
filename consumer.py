@@ -22,7 +22,7 @@ if PRODUCTION_URL:
 else:
   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
-q = rq.Queue(connection=r, timeout=30)
+q = rq.Queue(connection=r)
 
 
 class listener(StreamListener):
