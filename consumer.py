@@ -57,6 +57,7 @@ class listener(StreamListener):
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
     # put in sentiment analysis callback rather than str(i)
     q.enqueue(worker.sent_analysis, tweet, timeout=20)
+    print 'q__________________________________\n', q
     return True
 
   def on_error(self, status):
