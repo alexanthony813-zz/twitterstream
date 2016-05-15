@@ -10,7 +10,7 @@ from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, M
 is_prod = os.environ.get('IS_HEROKU', None)
 
 # string = r'mongodb://heroku_0p1s62cb:aev0huua42o4qjnrnen2ilj3a3@ds023442.mlab.com:23442/heroku_0p1s62cb'
-string = os.environ.get('MONGODB_URI')
+string = 'mongodb://alex:seal13@ds023442.mlab.com:23442/heroku_0p1s62cb'
 print '>>>>>>>>>>>>>>\n',string
 uri = string.rsplit()[0]
 print '>>>>>>>>>>>>>>>',uri
