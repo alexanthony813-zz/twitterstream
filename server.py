@@ -23,6 +23,8 @@ def connect():
     if not is_prod:
         global connection
         connection = MongoClient(uri, port=23442, maxPoolSize=10, waitQueueMultiple=10, connect=False)
+        # wait for the background (parent?) thread to drop the getadrinfo lock before forking
+        time.sleep(0.1)
         if os.fork():
             os.wait()
         connection.admin.command('ping')
