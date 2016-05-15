@@ -30,8 +30,8 @@ def connect():
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient(uri, MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
-    handle = connection['tweets']
-    handle.authenticate('alex13', 'seal13')
+    handle = connection['heroku_0p1s62cb']
+    handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
     return handle
 
 def process_aggregate_response(aggregate_polarity, sample_size):
