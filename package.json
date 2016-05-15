@@ -1,0 +1,6 @@
+{
+  "name":"coding_challenge",
+  "scripts": {
+    "start" : "python consumer.py & rq worker & python server.py"
+  }
+}
