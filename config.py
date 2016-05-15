@@ -19,3 +19,4 @@ REDIS_DEV_PORT = 9449
 REDIS_PROD_URL = 'redis://h:p8i3rsblvdebehclclbqc29sdfc@ec2-54-227-250-222.compute-1.amazonaws.com:9449'
 REDIS_PROD_PORT = 9449
 REDIS_PROD_PASSWORD = 'p8i3rsblvdebehclclbqc29sdfc'
+REDIS_TO_GO = 'redis://redistogo:56bdf242e048ef6d8083d7016967c2ce@catfish.redistogo.com:10220/'
