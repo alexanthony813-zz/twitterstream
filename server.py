@@ -84,6 +84,6 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     if is_prod:
-        app.run(host='0.0.0.0', port=port)
+        app.run(host='0.0.0.0', port=46012)
     else:
-        app.run(host='localhost', port=port, debug=True, threaded=True)
+        app.run(host='localhost', port=46012, debug=True, threaded=True)
