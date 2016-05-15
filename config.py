@@ -15,7 +15,7 @@ MONGO_URI = 'mongodb://alexanthony813:<dbpassword>@ds023432.mlab.com:23432/herok
 # heroku_dt491zn4
 # seal13
 REDIS_DEV_URL = 'localhost'
-REDIS_DEV_PORT = 9449
+REDIS_DEV_PORT = 6379
 REDIS_PROD_URL = 'redis://h:p8i3rsblvdebehclclbqc29sdfc@ec2-54-227-250-222.compute-1.amazonaws.com:9449'
 REDIS_PROD_PORT = 9449
 REDIS_PROD_PASSWORD = 'p8i3rsblvdebehclclbqc29sdfc'
