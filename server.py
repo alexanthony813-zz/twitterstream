@@ -26,10 +26,8 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         global connection
-        # print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n_____________________________'
-        connection = MongoClient(uri, int(os.environ.get('PORT', 23442)), maxPoolSize=50, waitQueueMultiple=10)
+        connection = MongoClient(uri, port=23442, maxPoolSize=50, waitQueueMultiple=10)
     else:
-        # print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['heroku_0p1s62cb']
     handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
@@ -37,18 +35,20 @@ def connect():
 
 def process_aggregate_response(aggregate_polarity, sample_size):
     # have to iterate to get first, and only, aggregate average value...break out into helper
-    for result in aggregate_polarity:
-        average_polarity = result['avgPolarity']
-        most_positive_tweet = handle.tweets.find_one({'polarity': result['mostPositive']})
-        most_negative_tweet = handle.tweets.find_one({'polarity': result['mostNegative']})
-        most_positive_coordinates = most_positive_tweet['coords']
-        most_positive_text = most_positive_tweet['text']
-        most_negative_coordinates = most_negative_tweet['coords']
-        most_negative_text = most_negative_tweet['text']
-        most_negative = {'text': most_negative_text, 'coordinates': most_negative_coordinates}
-        most_positive = {'text': most_positive_text, 'coordinates': most_positive_coordinates}
+    if aggregate_polarity is None:
+        return {'tweets': 'No tweets available'}
     else:
-        return {'tweets': sample_size, 'average_polarity': average_polarity, 'most_positive': most_positive, 'most_negative': most_negative}
+        for result in aggregate_polarity:
+            average_polarity = result['avgPolarity']
+            most_positive_tweet = handle.tweets.find_one({'polarity': result['mostPositive']})
+            most_negative_tweet = handle.tweets.find_one({'polarity': result['mostNegative']})
+            most_positive_coordinates = most_positive_tweet['coords']
+            most_positive_text = most_positive_tweet['text']
+            most_negative_coordinates = most_negative_tweet['coords']
+            most_negative_text = most_negative_tweet['text']
+            most_negative = {'text': most_negative_text, 'coordinates': most_negative_coordinates}
+            most_positive = {'text': most_positive_text, 'coordinates': most_positive_coordinates}
+            return {'tweets': sample_size, 'average_polarity': average_polarity, 'most_positive': most_positive, 'most_negative': most_negative}
 
 
 app = Flask(__name__)
@@ -84,7 +84,6 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 23442))
     if is_prod:
-        print 'we\'re doin it live!\n\n\n\n\!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!n\n\n\n\n'
         app.run(host='0.0.0.0', port=port)
     else:
         app.run(host='localhost', port=port, debug=True, threaded=True)
