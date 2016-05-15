@@ -19,9 +19,9 @@ asecret = api_asecret
 
 PRODUCTION_URL = os.environ.get('REDIS_URL')
 if PRODUCTION_URL:
-  r = redis.from_url(host=PRODUCTION_URL, port=REDIS_PROD_PORT, db=0)
+  r = redis.from_url(PRODUCTION_URL, port=REDIS_PROD_PORT, db=0)
 else:
-  r = redis.StrictRedis(host=REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
+  r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
 q = rq.Queue(connection=r)
 
