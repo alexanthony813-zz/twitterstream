@@ -23,10 +23,9 @@ def connect():
     if not is_prod:
         if os.fork():
             os.wait()
-        else:
-            global connection
-            connection = MongoClient(uri, port=23442, maxPoolSize=10, waitQueueMultiple=10, connect=False)
-            connection.admin.command('ping')
+        global connection
+        connection = MongoClient(uri, port=23442, maxPoolSize=10, waitQueueMultiple=10, connect=False)
+        connection.admin.command('ping')
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=10, waitQueueMultiple=10, connect=False)
     handle = connection['heroku_0p1s62cb']
