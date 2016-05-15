@@ -25,10 +25,6 @@ else:
   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
 q = rq.Queue(connection=r)
-with rq.Connection(r):
-  # reconfigure to use processes
-  worker = rq.Worker(map(q, ['high', 'default', 'low']))
-  worker.work()
 
 
 class listener(StreamListener):
@@ -72,4 +68,8 @@ twitterStream = Stream(auth, listener())
 # basically using very common english words to track and filter out for language (en lue of proper firehose connection from Twitter)
 twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
+  with rq.Connection(r):
+    # reconfigure to use processes
+    worker = rq.Worker(map(q, ['high', 'default', 'low']))
+    worker.work()
