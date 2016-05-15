@@ -11,9 +11,9 @@ is_prod = os.environ.get('IS_HEROKU', None)
 
 # string = r'mongodb://heroku_0p1s62cb:aev0huua42o4qjnrnen2ilj3a3@ds023442.mlab.com:23442/heroku_0p1s62cb'
 string = 'ds023442.mlab.com:23442'
-print '>>>>>>>>>>>>>>\n',string
+# print '>>>>>>>>>>>>>>\n',string
 uri = string.rsplit()[0]
-print '>>>>>>>>>>>>>>>',uri
+# print '>>>>>>>>>>>>>>>',uri
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
@@ -25,11 +25,11 @@ def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
-        print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n_____________________________'
+        # print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n_____________________________'
         connection = MongoClient(uri, port=23442, maxPoolSize=50, waitQueueMultiple=10)
     else:
-        print 'not mongo\n\n\n\n\n\n\n\n___________________________'
-        connection = MongoClient(uri, MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
+        # print 'not mongo\n\n\n\n\n\n\n\n___________________________'
+        connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['heroku_0p1s62cb']
     handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
     return handle
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 27017))
     if is_prod:
-        print 'we\'re doin it live!'
+        print 'we\'re doin it live!\n\n\n\n\!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!n\n\n\n\n'
         app.run(host='0.0.0.0', port=port)
     else:
         app.run(host='localhost', port=port, debug=True, threaded=True)
