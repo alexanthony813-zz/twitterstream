@@ -19,10 +19,10 @@ asecret = api_asecret
 
 PRODUCTION_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 if PRODUCTION_URL:
-      print 'prod\n>>>>>>>>>\n\n\n\____________',PRODUCTION_URL
+  print 'prod\n>>>>>>>>>\n\n\n\____________',PRODUCTION_URL
   r = redis.from_url(PRODUCTION_URL, port=6379, db=0)
 else:
-      print 'not production!!!!!!!!!!!!!!'
+  print 'not production!!!!!!!!!!!!!!'
   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
 q = rq.Queue(connection=r)
