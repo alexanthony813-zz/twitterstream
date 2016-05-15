@@ -6,6 +6,7 @@ from server import handle
 
 def parse_cords(coordstring):
     coords = coordstring.split(',')
+    print type(coords), coords
     x_beg_slice = coords[1].index('[')+1
     x = float(coords[1][x_beg_slice:])
     y_end_slice = coords[2].index(']')
@@ -19,7 +20,6 @@ def sent_analysis(tweet):
     sentiment = blob.sentiment
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
-    print type(tweet['coords']), tweet['coords']
     tweet['coords'] = parse_cords(tweet['coords'])
     handle.tweets.insert_one(tweet)
 
