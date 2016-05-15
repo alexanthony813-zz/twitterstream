@@ -68,3 +68,8 @@ auth.set_access_token(atoken, asecret)
 twitterStream = Stream(auth, listener())
 # basically using very common english words to track and filter out for language (en lue of proper firehose connection from Twitter)
 twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
+
+if __name__ == '__main__':
+  with rq.Connection(r):
+    worker = rq.Worker(map(Queue, listen))
+    worker.work()
