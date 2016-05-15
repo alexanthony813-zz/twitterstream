@@ -13,6 +13,7 @@ string = 'ds023442.mlab.com:23442'
 # print '>>>>>>>>>>>>>>\n',string
 uri = string.rsplit()[0]
 # print '>>>>>>>>>>>>>>>',uri
+print '\n here',os.environ.get('PORT')
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
