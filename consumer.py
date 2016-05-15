@@ -7,7 +7,7 @@ import redis
 import rq
 import nltk
 from textblob import TextBlob
-from worker import sent_analysis
+import worker
 from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_TO_GO, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
 import os
 print 'consuming\n>>>>>>>>>>>>>>>>>>>>>>>>>'
@@ -57,7 +57,7 @@ class listener(StreamListener):
 
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
     # put in sentiment analysis callback rather than str(i)
-    q.enqueue(sent_analysis, tweet, timeout=20)
+    q.enqueue(worker.sent_analysis, tweet, timeout=20)
     return True
 
   def on_error(self, status):
