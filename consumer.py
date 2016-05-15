@@ -20,7 +20,7 @@ asecret = api_asecret
 PRODUCTION_URL = os.environ.get('REDIS_URL')
 print 'prod\n>>>>>>>>>',
 if PRODUCTION_URL:
-  r = redis.from_url(REDIS_TO_GO, port=REDIS_PROD_PORT, db=0)
+  r = redis.from_url(PRODUCTION_URL, port=9449, db=0)
 else:
   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
