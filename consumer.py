@@ -10,7 +10,7 @@ from textblob import TextBlob
 from worker import sent_analysis
 from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_TO_GO, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
 import os
-print 'consuming\n'
+print 'consuming\n>>>>>>>>>>>>>>>>>>>>>>>>>'
 # might have to change this to
 ckey = api_ckey
 csecret = api_csecret
@@ -18,10 +18,11 @@ atoken = api_atoken
 asecret = api_asecret
 
 PRODUCTION_URL = os.environ.get('REDIS_URL')
-print 'prod\n>>>>>>>>>\n\n\n\____________',PRODUCTION_URL
 if PRODUCTION_URL:
+      print 'prod\n>>>>>>>>>\n\n\n\____________',PRODUCTION_URL
   r = redis.from_url(PRODUCTION_URL, port=6379, db=0)
 else:
+      print 'not production!!!!!!!!!!!!!!'
   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
 q = rq.Queue(connection=r)
