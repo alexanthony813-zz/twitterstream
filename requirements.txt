@@ -23,4 +23,3 @@ textblob==0.11.1
 tweepy==3.5.0
 Werkzeug==0.11.9
 WTForms==2.1
-RC7=0.9.0
