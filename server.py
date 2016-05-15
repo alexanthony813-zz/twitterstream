@@ -22,7 +22,7 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         global connection
-        connection = MongoClient(uri, port=23442, maxPoolSize=50, waitQueueMultiple=10, connect=False).fork()
+        connection = MongoClient(uri, port=23442, maxPoolSize=50, waitQueueMultiple=10, connect=False)
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10, connect=False)
     handle = connection['heroku_0p1s62cb']
