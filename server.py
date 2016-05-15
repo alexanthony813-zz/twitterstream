@@ -26,7 +26,7 @@ def connect():
     if not is_prod:
         global connection
         # print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n_____________________________'
-        connection = MongoClient(uri, os.environ.get('PORT', 23442), maxPoolSize=50, waitQueueMultiple=10)
+        connection = MongoClient(uri, int(os.environ.get('PORT', 23442)), maxPoolSize=50, waitQueueMultiple=10)
     else:
         # print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
