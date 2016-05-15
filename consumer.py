@@ -50,6 +50,7 @@ class listener(StreamListener):
     try:
       text = unicode(json_data['text'])
       unicode_text = unicodedata.normalize('NFKD', text).encode('utf-8','ignore')
+      print 'text\n', unicode_text
     except:
       # end process for tweets without any text value
       return
