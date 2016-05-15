@@ -24,7 +24,11 @@ def connect():
         global connection
         connection = MongoClient(uri, port=23442, maxPoolSize=50, waitQueueMultiple=10, connect=False)
         if os.fork():
+            # Parent waits for child.
             os.wait()
+        else:
+            # Child hangs here.
+            socket.getaddrinfo('mongodb.org', 80)
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10, connect=False)
     handle = connection['heroku_0p1s62cb']
