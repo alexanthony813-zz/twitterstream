@@ -12,8 +12,8 @@ MONGO_PROD_URL = 'mongodb://heroku_tx52tt9z:sj3tm7t0fc290185h4u0e1r2ns@ds041144.
 MONGOHQ_URL = 'mongodb://heroku:y1xCZHevVcnslAkFkIldT5tooj9qxJuiXmVNScZCKLxISvhI7-6CMZZRWADRR46cnSEakHksfJ_d4yJ3C06-Bg@candidate.18.mongolayer.com:11532,candidate.33.mongolayer.com:11226/app50799982MO'
 MONGO_URI = 'mongodb://alexanthony813:<dbpassword>@ds023432.mlab.com:23432/heroku_dt491zn4'
 
-heroku_dt491zn4
-seal13
+# heroku_dt491zn4
+# seal13
 REDIS_DEV_URL = 'localhost'
 REDIS_DEV_PORT = 6379
 REDIS_PROD_URL = 'redis://h:p8i3rsblvdebehclclbqc29sdfc@ec2-54-227-250-222.compute-1.amazonaws.com:9449'
