@@ -26,7 +26,7 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n_____________________________'
-        connection = MongoClient(uri, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient(uri, maxPoolSize=50, waitQueueMultiple=10)
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient(uri, MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
