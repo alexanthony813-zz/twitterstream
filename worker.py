@@ -19,6 +19,7 @@ def sent_analysis(tweet):
     sentiment = blob.sentiment
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
+    print type(tweet['coords']), tweet['coords']
     tweet['coords'] = parse_cords(tweet['coords'])
     handle.tweets.insert_one(tweet)
 
