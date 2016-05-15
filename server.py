@@ -10,7 +10,7 @@ from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, M
 is_prod = os.environ.get('IS_HEROKU', None)
 
 # string = r'mongodb://heroku_0p1s62cb:aev0huua42o4qjnrnen2ilj3a3@ds023442.mlab.com:23442/heroku_0p1s62cb'
-string = 'mongodb://alex13:seal13@ds023442.mlab.com:23442/heroku_0p1s62cb'
+string = 'ds023442.mlab.com:23442'
 print '>>>>>>>>>>>>>>\n',string
 uri = string.rsplit()[0]
 print '>>>>>>>>>>>>>>>',uri
@@ -26,11 +26,12 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!\n\n\n\n\n_____________________________'
-        connection = MongoClient(uri, maxPoolSize=50, waitQueueMultiple=10)
+        connection = MongoClient(uri, port=23442, maxPoolSize=50, waitQueueMultiple=10)
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient(uri, MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
+    db.authenticate('alex13', 'seal13')
     return handle
 
 def process_aggregate_response(aggregate_polarity, sample_size):
