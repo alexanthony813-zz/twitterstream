@@ -22,7 +22,7 @@ if PRODUCTION_URL:
 else:
   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
 
-q = rq.Queue(connection=r, timeout=30)
+q = rq.Queue(connection=r)
 
 
 class listener(StreamListener):
@@ -55,11 +55,6 @@ class listener(StreamListener):
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
     q.enqueue(sent_analysis, tweet, timeout=20)
     sleep(0.05)
-    with rq.Connection(r):
-      # reconfigure to use processes
-      global worker
-      worker = rq.Worker(q)
-      worker.work()
 
   def on_error(self, status):
     print status
@@ -69,3 +64,9 @@ auth.set_access_token(atoken, asecret)
 twitterStream = Stream(auth, listener())
 # basically using very common english words to track and filter out for language (en lue of proper firehose connection from Twitter)
 twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
+
+with rq.Connection(r):
+  # reconfigure to use processes
+  global worker
+  worker = rq.Worker(q)
+  worker.work()
