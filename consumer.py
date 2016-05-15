@@ -17,7 +17,7 @@ csecret = api_csecret
 atoken = api_atoken
 asecret = api_asecret
 
-PRODUCTION_URL = os.environ.get('REDIS_URL')
+PRODUCTION_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 if PRODUCTION_URL:
       print 'prod\n>>>>>>>>>\n\n\n\____________',PRODUCTION_URL
   r = redis.from_url(PRODUCTION_URL, port=6379, db=0)
