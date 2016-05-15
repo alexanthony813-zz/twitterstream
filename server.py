@@ -61,8 +61,7 @@ def index():
 
 @app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
 def get_sentiment(lat, lon, km_radius):
-    print 'getting sentiment_______________________________\n'
-    return jsonify({})
+    print 'getting sentiment__________________~!!!!_____________\n'
     # TD: add form control so server doesn't crash for invalid coords
     lat = float(lat)
     lon = float(lon)
@@ -73,6 +72,8 @@ def get_sentiment(lat, lon, km_radius):
     tweets = handle.tweets.find(query)
     sample_size = tweets.count() if tweets.count() != 0 else "No tweets available for this location at this time"
 
+    if type(sample_size)==str:
+        return jsonify({'tweets' : sample_size})
     # use $geoNear here to get actual polarity values in that area, then use aggregator to average
     pipeline = [{"$geoNear": {"near": [lat, lon], "distanceField": "coords", "maxDistance": degree_radius}}, {"$group": {"_id": None, "avgPolarity": {"$avg": "$polarity"}, "mostPositive": {"$max": "$polarity"}, "mostNegative": {"$min": "$polarity"}}}]
     aggregate_polarity = handle.tweets.aggregate(pipeline)
@@ -85,6 +86,6 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 46012))
     if not is_prod:
-        app.run(host='0.0.0.0', port=port)
+        app.run(host='0.0.0.0', port=port, debug=True)
     else:
         app.run(host='localhost', port=46012, debug=True, threaded=True)
