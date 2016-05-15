@@ -29,4 +29,9 @@ def sent_analysis(tweet):
     handle.tweets.insert_one(tweet)
 
 if __name__ == '__main__':
-    print 'running'
+    child = os.fork()
+    if child == 0:
+        return
+    try:
+        os.wait()
+    sys.exit()
