@@ -58,6 +58,11 @@ class listener(StreamListener):
     tweet = {'coords': unicode_coords, 'created_at': unicode_created_at, 'text': unicode_text}
     # put in sentiment analysis callback rather than str(i)
     q.enqueue(worker.sent_analysis, tweet, timeout=20)
+    with rq.Connection(r):
+      print 'working'
+      # reconfigure to use processes
+      worker = rq.Worker(map(q,['high', 'default', 'low']))
+      worker.work()
     print 'q__________________________________\n', q
     return True
 
@@ -69,10 +74,3 @@ auth.set_access_token(atoken, asecret)
 twitterStream = Stream(auth, listener())
 # basically using very common english words to track and filter out for language (en lue of proper firehose connection from Twitter)
 twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
-
-if __name__ == '__main__':
-  with rq.Connection(r):
-    print 'working'
-    # reconfigure to use processes
-    worker = rq.Worker(map(q,['high', 'default', 'low']))
-    worker.work()
