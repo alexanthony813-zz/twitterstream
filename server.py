@@ -6,7 +6,7 @@ from flask import Flask, request, render_template, jsonify, redirect
 from bson.json_util import dumps
 from bson.son import SON
 import requests
-from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
 
 
