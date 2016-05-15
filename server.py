@@ -61,7 +61,7 @@ def index():
 
 @app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
 def get_sentiment(lat, lon, km_radius):
-
+    print 'getting sentiment_______________________________\n'
     # TD: add form control so server doesn't crash for invalid coords
     lat = float(lat)
     lon = float(lon)
