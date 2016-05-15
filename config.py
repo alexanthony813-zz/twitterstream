@@ -3,8 +3,7 @@ api_csecret = 'uWClVOYHuBIoV7nOdItRIeFgRUtrms9jk0OesT9sOWWk3WOd6W'
 api_atoken = '730880914692046848-ZtqJuUTqhbcPfbeW1iKWB8DqTRWxSlr'
 api_asecret = 'Fct3KwbH7HDdQah1byXfeP3yDWk7eaLStnuAIJxY9Ej8M'
 
-MONGO_GOLD_URI = 'mongodb://alexanthony813:gfkgzarza13@ds041144.mlab.com:41144/heroku_tx52tt9z'
-  # mongodb://<dbuser>:<dbpassword>@ds041144.mlab.com:41144/heroku_tx52tt9z
+MONGO_GOLD_URI = 'mongodb://alex13:seal13@ds023432.mlab.com:23432/heroku_dt491zn4'
 
 
 MONGO_DEV_URL = 'localhost'

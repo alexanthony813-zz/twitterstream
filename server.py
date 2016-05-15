@@ -21,10 +21,10 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         print 'PROD MONGOD!!!!!!!!!!!!!!!!!!!!'
-        connection = MongoClient(MONGO_GOLD_URI, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient('mongodb://alex13:seal13@ds023432.mlab.com:23432/heroku_dt491zn4', max_pool_size=50, waitQueueMultiple=10)
     else:
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
-        connection = MongoClient(MONGO_GOLD_URI,MONGO_DEV_PORT, max_pool_size=50, waitQueueMultiple=10)
+        connection = MongoClient('mongodb://alex13:seal13@ds023432.mlab.com:23432/heroku_dt491zn4', MONGO_DEV_PORT, max_pool_size=50, waitQueueMultiple=10)
     handle = connection['tweets']
     return handle
 
