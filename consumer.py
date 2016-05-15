@@ -70,9 +70,7 @@ twitterStream = Stream(auth, listener())
 # basically using very common english words to track and filter out for language (en lue of proper firehose connection from Twitter)
 twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
 
-if __name__ == '__main__':
-  print 'am i in here????????????????????????????????????????????\n\n\n'
-  with rq.Connection(r):
-    # reconfigure to use processes
-    worker = rq.Worker(q)
-    worker.work()
+with rq.Connection(r):
+  # reconfigure to use processes
+  worker = rq.Worker(q)
+  worker.work()
