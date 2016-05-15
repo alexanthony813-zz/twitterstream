@@ -3,6 +3,7 @@ import json
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
 import os
 from server import handle
+import sys
 
 def parse_cords(coordstring):
     try:
