@@ -21,10 +21,10 @@ def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
-        if os.fork():
-            os.wait()
         global connection
         connection = MongoClient(uri, port=23442, maxPoolSize=10, waitQueueMultiple=10, connect=False)
+        if os.fork():
+            os.wait()
         connection.admin.command('ping')
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=10, waitQueueMultiple=10, connect=False)
