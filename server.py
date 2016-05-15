@@ -31,7 +31,7 @@ def connect():
         print 'not mongo\n\n\n\n\n\n\n\n___________________________'
         connection = MongoClient(uri, MONGO_DEV_PORT, maxPoolSize=50, waitQueueMultiple=10)
     handle = connection['tweets']
-    db.authenticate('alex13', 'seal13')
+    handle.authenticate('alex13', 'seal13')
     return handle
 
 def process_aggregate_response(aggregate_polarity, sample_size):
