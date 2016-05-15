@@ -82,8 +82,8 @@ def get_sentiment(lat, lon, km_radius):
 # Remove the "debug=True" for production
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT'))
     if is_prod:
-        app.run(host='0.0.0.0', port=46012)
+        app.run(host='0.0.0.0', port=port)
     else:
         app.run(host='localhost', port=46012, debug=True, threaded=True)
