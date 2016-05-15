@@ -7,6 +7,7 @@ from bson.json_util import dumps
 from bson.son import SON
 import requests
 from time import sleep
+import socket
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
 string = 'ds023442.mlab.com:23442'
@@ -29,7 +30,8 @@ def connect():
         if os.fork():
             os.wait()
         else:
-            connection.admin.command('ping')
+            socket.getaddrinfo('mongodb.org', 80)
+            # connection.admin.command('ping')
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=10, waitQueueMultiple=10, connect=False)
     handle = connection['heroku_0p1s62cb']
