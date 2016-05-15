@@ -36,9 +36,8 @@ def watcher():
     try:
         os.wait()
     except:
-        print 'waiting'
-        connection.admin.command('ping')
-        # socket.getaddrinfo('mongodb.org', 80)
+        socket.getaddrinfo('mongodb.org', 80)
+    sys.exit()
 
 if __name__ == '__main__':
     watcher()
