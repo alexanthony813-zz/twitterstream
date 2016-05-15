@@ -4,7 +4,6 @@ import json
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
 import os
 from server import handle
-print 'in worker\n'
 # MONGO_URL = os.environ.get('MONGO_URL')
 # if not MONGO_URL:
 #   MONGO_URL = MONGO_DEV_URL
@@ -29,4 +28,3 @@ def sent_analysis(tweet):
     tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
     handle.tweets.insert([tweet])
-    print 'anything>>>>>>>>>>>>>>>>>>>>>>\n',handle.tweets.find()
