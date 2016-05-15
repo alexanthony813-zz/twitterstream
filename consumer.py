@@ -18,7 +18,7 @@ atoken = api_atoken
 asecret = api_asecret
 
 PRODUCTION_URL = os.environ.get('REDIS_URL')
-print 'prod\n>>>>>>>>>',
+print 'prod\n>>>>>>>>>\n\n\n\____________',PRODUCTION_URL
 if PRODUCTION_URL:
   r = redis.from_url(PRODUCTION_URL, port=6379, db=0)
 else:

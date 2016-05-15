@@ -1,2 +1,2 @@
-web: python server.py; rq worker;
-worker: python worker.py;
+web: python server.py;
+worker: python consumer.py;
