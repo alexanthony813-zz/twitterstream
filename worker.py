@@ -3,14 +3,14 @@ from textblob import TextBlob
 import json
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
 import os
-from server import connection
+from server import handle
 print 'in worker\n'
 # MONGO_URL = os.environ.get('MONGO_URL')
 # if not MONGO_URL:
 #   MONGO_URL = MONGO_DEV_URL
 
 # conn = MongoClient(MONGO_URL, MONGO_DEV_PORT, connect=False)
-db = connection.tweets
+# db = connection.tweets
 
 def parse_cords(coordstring):
     coords = coordstring.split(',')
@@ -28,4 +28,4 @@ def sent_analysis(tweet):
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
-    db.tweets.insert_one(tweet)
+    handle.tweets.insert_one(tweet)
