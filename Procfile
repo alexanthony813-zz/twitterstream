@@ -1,2 +1,2 @@
-web: celery -A tasks worker --loglevel=info;
-worker: python -u consumer.py;
+web: python -u consumer.py;
+worker: celery -A tasks worker --loglevel=info;
