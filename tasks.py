@@ -12,8 +12,8 @@ print 'task'
 #     import consumer
 
 
-REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-app = Celery('tasks', broker=REDIS_URL)
+# REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+app = Celery('tasks', broker='redis://redistogo:56bdf242e048ef6d8083d7016967c2ce@catfish.redistogo.com:10220/')
 app.config_from_object('celeryconfig')
 
 def parse_cords(coordstring):
