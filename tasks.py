@@ -8,8 +8,6 @@ import time
 from server import connection, handle
 is_prod = os.environ.get('IS_HEROKU', None)
 print 'task'
-# if is_prod:
-#     import consumer
 
 
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -38,7 +36,7 @@ def sent(tweet):
     except:
         return
     tweet['coords'] = parse_cords(tweet['coords'])
-    if tweet['coords'] == []:
+    if len(tweet['coords']) == 0:
         return
     sentiment = blob.sentiment
     tweet['polarity'] = sentiment.polarity
