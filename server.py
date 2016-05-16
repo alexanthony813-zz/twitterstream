@@ -24,7 +24,8 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if not is_prod:
         global connection
-        connection = MongoClient(uri, port=23442, maxPoolSize=10, waitQueueMultiple=10, connect=False)
+        # MongoClient creates sockets
+        connection = MongoClient(uri, port=23442, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=5000)
         # wait for the background (parent?) thread to drop the getaddrinfo lock before forking
         # sleep(0.1)
         # if os.fork():
@@ -33,7 +34,7 @@ def connect():
         #     socket.getaddrinfo('mongodb.org', 80)
             # connection.admin.command('ping')
     else:
-        connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=10, waitQueueMultiple=10, connect=False)
+        connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=1)
     handle = connection['heroku_0p1s62cb']
     handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
     return handle
