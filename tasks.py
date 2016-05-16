@@ -4,24 +4,11 @@ from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
 import os
 import sys
 from celery import Celery
+import time
+from server import connection, handle
 
 app = Celery('tasks', broker='redis://localhost')
-
-# TWITTER!!!!!!!!!!!!!!!
-from tweepy import Stream
-from tweepy import OAuthHandler
-from tweepy.streaming import StreamListener
-import json
-import unicodedata
-import redis
-import nltk
-from textblob import TextBlob
-from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
-from textblob import TextBlob
-from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_TO_GO, REDIS_DEV_URL, REDIS_DEV_PORT, REDIS_PROD_PORT, REDIS_PROD_URL
-import os
-from time import sleep
-from server import connection, handle
+app.config_from_object('celeryconfig')
 
 def parse_cords(coordstring):
     try:
@@ -37,14 +24,9 @@ def parse_cords(coordstring):
 
 @app.task
 def sent(tweet):
-    print 'in worker\n'
-    if type(tweet)==str:
-        return 'f'
-    # async write
-    # handle = connection['tweets']
-    # handle.authenticate('')
-
+    time.sleep(30)
     text = tweet['text']
+    print text
 
     try:
         blob = TextBlob(u'%s' % tweet['text'])
@@ -54,6 +36,7 @@ def sent(tweet):
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
     tweet['coords'] = parse_cords(tweet['coords'])
-    return tweet
-    # handle.tweets.insert_one(tweet) RECONFIGURE TO USE BUILT IN
     print 'man, im going to miss that thread!'
+    handle.tweets.insert_one(tweet)
+    print tweet
+    return tweet

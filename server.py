@@ -22,7 +22,7 @@ def in_circle(center_x, center_y, radius, tweet_coords):
 def connect():
     # refactor with ternary
     MONGO_URL = MONGO_DEV_URL
-    if not is_prod:
+    if is_prod:
         global connection
         # MongoClient creates sockets
         connection = MongoClient(uri, port=23442, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=5000)
@@ -35,8 +35,8 @@ def connect():
             # connection.admin.command('ping')
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=1)
-    handle = connection['heroku_0p1s62cb']
-    handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
+    handle = connection['tweets']
+    # handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
     return handle
 
 def process_aggregate_response(aggregate_polarity, sample_size):
