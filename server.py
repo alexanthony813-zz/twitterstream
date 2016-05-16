@@ -10,7 +10,7 @@ from time import sleep
 import socket
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
-day_in_seconds = 60*60*24
+three_days_in_seconds = 60*60*24
 print 'server'
 
 def in_circle(center_x, center_y, radius, tweet_coords):
@@ -57,7 +57,7 @@ def process_aggregate_response(aggregate_polarity, sample_size):
 app = Flask(__name__)
 handle = connect()
 handle.tweets.create_index([('coords', '2d')])
-handle.tweets.create_index('date', expireAfterSeconds=day_in_seconds)
+handle.tweets.create_index('date', expireAfterSeconds=three_days_in_seconds)
 
 @app.route("/", methods=['GET'])
 def index():
