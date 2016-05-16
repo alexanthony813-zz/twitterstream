@@ -43,6 +43,3 @@ def sent(tweet):
     tweet['coords'] = parse_cords(tweet['coords'])
     handle.tweets.insert_one(tweet)
     return tweet
-
-if __name__ == '__main__':
-    main()
