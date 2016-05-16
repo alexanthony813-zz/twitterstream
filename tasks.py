@@ -37,9 +37,11 @@ def sent(tweet):
         blob = TextBlob(u'%s' % tweet['text'])
     except:
         return
+    tweet['coords'] = parse_cords(tweet['coords'])
+    if tweet['coords'] == []:
+        return
     sentiment = blob.sentiment
     tweet['polarity'] = sentiment.polarity
     tweet['subjectivity'] = sentiment.subjectivity
-    tweet['coords'] = parse_cords(tweet['coords'])
     handle.tweets.insert_one(tweet)
     return tweet
