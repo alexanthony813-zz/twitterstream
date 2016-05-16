@@ -13,6 +13,7 @@ import os
 from time import sleep
 from server import connection, handle
 from tasks import sent
+print 'consumer'
 
 ckey = api_ckey
 csecret = api_csecret

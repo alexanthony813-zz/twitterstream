@@ -7,7 +7,7 @@ from celery import Celery
 import time
 from server import connection, handle
 is_prod = os.environ.get('IS_HEROKU', None)
-print 'is_prod?', is_prod
+print 'task'
 
 
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')

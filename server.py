@@ -12,8 +12,7 @@ from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, M
 is_prod = os.environ.get('IS_HEROKU', None)
 string = 'ds023442.mlab.com:23442'
 uri = string.rsplit()[0]
-
-print 'is_prod?', is_prod
+print 'server'
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
