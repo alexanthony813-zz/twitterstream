@@ -6,9 +6,12 @@ import sys
 from celery import Celery
 import time
 from server import connection, handle
+import datetime
+
 is_prod = os.environ.get('IS_HEROKU', None)
 print 'task'
 
+hour_in_seconds = 60*60
 
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 app = Celery('tasks', broker=REDIS_URL)
@@ -43,5 +46,7 @@ def sent(tweet):
         sentiment = blob.sentiment
         tweet['polarity'] = sentiment.polarity
         tweet['subjectivity'] = sentiment.subjectivity
-        handle.tweets.insert_one(tweet)
+        tweet['date'] = datetime.datetime.utcnow()
+        handle.tweets.ensure_index('date', expireAfterSeconds=hour_in_seconds)
+        new_tweet = handle.tweets.insert_one(tweet)
         return tweet
