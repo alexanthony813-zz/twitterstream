@@ -38,8 +38,9 @@ def sent(tweet):
     tweet['coords'] = parse_cords(tweet['coords'])
     if len(tweet['coords']) == 0:
         return
-    sentiment = blob.sentiment
-    tweet['polarity'] = sentiment.polarity
-    tweet['subjectivity'] = sentiment.subjectivity
-    handle.tweets.insert_one(tweet)
-    return tweet
+    else:
+        sentiment = blob.sentiment
+        tweet['polarity'] = sentiment.polarity
+        tweet['subjectivity'] = sentiment.subjectivity
+        handle.tweets.insert_one(tweet)
+        return tweet
