@@ -6,7 +6,7 @@ CELERY_RESULT_BACKEND = "mongodb"
 CELERY_MONGODB_BACKEND_SETTINGS = {
     "host": "127.0.0.1",
     "port": 27017,
-    "database": "tweets",
+    "database": "'heroku_0p1s62cb'",
     "taskmeta_collection": "stock_taskmeta_collection",
 }
 

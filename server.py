@@ -29,9 +29,11 @@ def connect():
         connection = MongoClient(uri, port=23442, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=5000)
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=1)
-    handle = connection['tweets']
     if is_prod:
+        handle = connection['heroku_0p1s62cb']
         handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
+    else:
+        handle = connection['tweets']
     return handle
 
 def process_aggregate_response(aggregate_polarity, sample_size):
