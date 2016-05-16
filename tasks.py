@@ -10,7 +10,7 @@ is_prod = os.environ.get('IS_HEROKU', None)
 print 'is_prod?', is_prod
 
 
-REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 app = Celery('tasks', broker=REDIS_URL)
 app.config_from_object('celeryconfig')
 
