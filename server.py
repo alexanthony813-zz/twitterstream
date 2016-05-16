@@ -1,17 +1,10 @@
-from flask import Flask, render_template, request, redirect
 import os
-from pymongo import MongoClient, GEO2D
-# Set the path
-from flask import Flask, request, render_template, jsonify, redirect
-from bson.json_util import dumps
+from pymongo import MongoClient
+from flask import Flask, render_template, jsonify
 from bson.son import SON
-import requests
-from time import sleep
-import socket
-from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
 three_days_in_seconds = 60*60*24
-print 'server'
+
 
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
@@ -19,22 +12,22 @@ def in_circle(center_x, center_y, radius, tweet_coords):
     square_dist = (center_x - x) ** 2 + (center_y - y) ** 2
     return square_dist <= radius ** 2
 
+
 def connect():
-    # refactor with ternary
-    MONGO_URL = MONGO_DEV_URL
     if is_prod:
         global connection
         string = 'ds023442.mlab.com:23442'
         uri = string.rsplit()[0]
         connection = MongoClient(uri, port=23442, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=5000)
     else:
-        connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=1)
+        connection = MongoClient('localhost', 27017, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=1)
     if is_prod:
         handle = connection['heroku_0p1s62cb']
         handle.authenticate('heroku_0p1s62cb', 'aev0huua42o4qjnrnen2ilj3a3')
     else:
         handle = connection['tweets']
     return handle
+
 
 def process_aggregate_response(aggregate_polarity, sample_size):
     # have to iterate to get first, and only, aggregate average value...break out into helper
@@ -59,24 +52,34 @@ handle = connect()
 handle.tweets.create_index([('coords', '2d')])
 handle.tweets.create_index('date', expireAfterSeconds=three_days_in_seconds)
 
+
 @app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
 
+
 @app.route("/get_sentiment/<lat>/<lon>/<km_radius>", methods=['GET'])
 def get_sentiment(lat, lon, km_radius):
-    # TD: add form control so server doesn't crash for invalid coords
-    lat = float(lat)
-    lon = float(lon)
-    degree_radius = (int(km_radius)/111.2)
+    # basic protection against invalid query params
+    try:
+        lat = float(lat)
+        lon = float(lon)
+        degree_radius = (int(km_radius)/111.2)
+    except:
+        return jsonify({'parameters incorrect': 'please use valid coordinates and a positive numerical value for the radius'})
 
-    # TD: reformat to use agg
+    if abs(lat) > 90 or abs(lon) > 180 or degree_radius <= 0:
+        return jsonify({'parameters incorrect': 'please use valid coordinates and a positive numerical value for the radius'})
+
+    # TODO: expand this aggregator to avoid second tweets query
     query = {"coords": SON([("$near", [lat, lon]), ("$maxDistance", degree_radius)])}
     tweets = handle.tweets.find(query)
-    sample_size = tweets.count() if tweets.count() != 0 else "No tweets available for this location at this time"
 
-    if type(sample_size)==str:
-        return jsonify({'tweets' : sample_size})
+    # if sample_size is 0, then we return a json object with a notification
+    sample_size = tweets.count() if tweets.count() != 0 else "No tweets available for this location at this time"
+    if type(sample_size) == str:
+        return jsonify({'tweets': sample_size})
+
     # use $geoNear here to get actual polarity values in that area, then use aggregator to average
     pipeline = [{"$geoNear": {"near": [lat, lon], "distanceField": "coords", "maxDistance": degree_radius}}, {"$group": {"_id": None, "avgPolarity": {"$avg": "$polarity"}, "mostPositive": {"$max": "$polarity"}, "mostNegative": {"$min": "$polarity"}}}]
     aggregate_polarity = handle.tweets.aggregate(pipeline)
@@ -89,6 +92,6 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 46012))
     if is_prod:
-        app.run(host='0.0.0.0', port=port, debug=True)
+        app.run(host='0.0.0.0', port=port)
     else:
-        app.run(host='localhost', port=46012, debug=True, threaded=True)
+        app.run(host='localhost', port=port, debug=True)
