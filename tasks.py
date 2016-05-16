@@ -36,7 +36,8 @@ def sent(tweet):
     except:
         return
     tweet['coords'] = parse_cords(tweet['coords'])
-    if len(tweet['coords']) == 0:
+    if tweet['coords'] == []:
+        print 'threw out>>>>>>>>>\n\n\n', tweet['coords']
         return
     else:
         sentiment = blob.sentiment
