@@ -1,13 +1,17 @@
 from textblob import TextBlob
 import json
-from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL
+from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_DEV_URL, REDIS_DEV_URL, REDIS_DEV_PORT
 import os
 import sys
 from celery import Celery
 import time
 from server import connection, handle
+is_prod = os.environ.get('IS_HEROKU', None)
+print 'is_prod?', is_prod
 
-app = Celery('tasks', broker='redis://localhost')
+
+REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+app = Celery('tasks', broker=REDIS_URL)
 app.config_from_object('celeryconfig')
 
 def parse_cords(coordstring):

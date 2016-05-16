@@ -13,6 +13,8 @@ is_prod = os.environ.get('IS_HEROKU', None)
 string = 'ds023442.mlab.com:23442'
 uri = string.rsplit()[0]
 
+print 'is_prod?', is_prod
+
 def in_circle(center_x, center_y, radius, tweet_coords):
     x = tweet_coords[0]
     y = tweet_coords[1]
@@ -90,7 +92,7 @@ def get_sentiment(lat, lon, km_radius):
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 46012))
-    if not is_prod:
+    if is_prod:
         app.run(host='0.0.0.0', port=port, debug=True)
     else:
         app.run(host='localhost', port=46012, debug=True, threaded=True)
