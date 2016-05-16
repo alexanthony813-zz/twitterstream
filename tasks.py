@@ -11,7 +11,7 @@ import datetime
 is_prod = os.environ.get('IS_HEROKU', None)
 print 'task'
 
-hour_in_seconds = 60*60
+hour_in_seconds = 60*60*2
 
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 app = Celery('tasks', broker=REDIS_URL)
@@ -47,6 +47,6 @@ def sent(tweet):
         tweet['polarity'] = sentiment.polarity
         tweet['subjectivity'] = sentiment.subjectivity
         tweet['date'] = datetime.datetime.utcnow()
-        handle.tweets.ensure_index('date', expireAfterSeconds=hour_in_seconds)
+        handle.tweets.ensure_index('date', expireAfterSeconds=60)
         new_tweet = handle.tweets.insert_one(tweet)
         return tweet
