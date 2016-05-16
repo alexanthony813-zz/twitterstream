@@ -10,8 +10,6 @@ from time import sleep
 import socket
 from config import MONGO_DEV_URL, MONGO_DEV_PORT, MONGO_PROD_URL, MONGOHQ_URL, MONGO_URI, MONGO_GOLD_URI
 is_prod = os.environ.get('IS_HEROKU', None)
-string = 'ds023442.mlab.com:23442'
-uri = string.rsplit()[0]
 print 'server'
 
 def in_circle(center_x, center_y, radius, tweet_coords):
@@ -25,6 +23,8 @@ def connect():
     MONGO_URL = MONGO_DEV_URL
     if is_prod:
         global connection
+        string = 'ds023442.mlab.com:23442'
+        uri = string.rsplit()[0]
         connection = MongoClient(uri, port=23442, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=5000)
     else:
         connection = MongoClient('localhost', MONGO_DEV_PORT, maxPoolSize=100, waitQueueMultiple=10, connect=False, serverSelectionTimeoutMS=1)
