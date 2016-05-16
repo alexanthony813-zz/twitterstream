@@ -19,13 +19,6 @@ csecret = api_csecret
 atoken = api_atoken
 asecret = api_asecret
 
-# PRODUCTION_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-# if PRODUCTION_URL:
-#   r = redis.from_url(PRODUCTION_URL, port=6379, db=0)
-# else:
-#   r = redis.StrictRedis(REDIS_DEV_URL, port=REDIS_DEV_PORT, db=0)
-
-
 class listener(StreamListener):
 
   def on_data(self, data):
@@ -68,52 +61,3 @@ auth.set_access_token(atoken, asecret)
 twitterStream = Stream(auth, listener())
 # basically using very common english words to track and filter out for language (en lue of proper firehose connection from Twitter)
 twitterStream.filter(languages=['en'], track=['a', 'the', 'i', 'you', 'u'])
-
-
-# /////////////////////////////////////////////////////
-
-# # from tasks import sent_analysis, print_piss
-# import tasks
-# from celery.result import AsyncResult
-# from celery.task.control import inspect
-# i = inspect()
-
-# hopefully this is the right broker
-# from worker import sent_analysis
-
-# def parse_cords(coordstring):
-#     try:
-#         coords = coordstring.split(',')
-#         x_beg_slice = coords[1].index('[')+1
-#         x = float(coords[1][x_beg_slice:])
-#         y_end_slice = coords[2].index(']')
-#         y = float(coords[2][:y_end_slice])
-#         coords = [x, y]
-#         return coords
-#     except:
-#         return []
-
-# @app.task
-# def sent_analysis(tweet):
-#     print 'in worker\n'
-#     # async write
-#     # handle = connection['tweets']
-#     handle.authenticate('')
-
-#     text = tweet['text']
-
-#     try:
-#         blob = TextBlob(u'%s' % tweet['text'])
-#     except:
-#         return
-#     sentiment = blob.sentiment
-#     tweet['polarity'] = sentiment.polarity
-#     tweet['subjectivity'] = sentiment.subjectivity
-#     tweet['coords'] = parse_cords(tweet['coords'])
-#     handle.tweets.insert_one(tweet)
-#     print 'man, im going to miss that thread!'
-    # def write(arg_tweet):
-
-    # thread = Thread(target=write,args=(tweet,))
-    # thread.start()
-# ///////////////////////////////////////////////////////////////////
