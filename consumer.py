@@ -12,6 +12,7 @@ from config import api_ckey, api_csecret, api_atoken, api_asecret, REDIS_TO_GO, 
 import os
 from time import sleep
 from server import connection, handle
+from tasks import sent
 print 'consumer'
 
 ckey = api_ckey
@@ -22,7 +23,6 @@ asecret = api_asecret
 class listener(StreamListener):
 
   def on_data(self, data):
-    from tasks import sent
     # also get geolocation, save to redis.
     json_data = json.loads(data)
 

@@ -8,8 +8,8 @@ import time
 from server import connection, handle
 is_prod = os.environ.get('IS_HEROKU', None)
 print 'task'
-if is_prod:
-    import consumer
+# if is_prod:
+#     import consumer
 
 
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
