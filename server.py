@@ -82,11 +82,11 @@ def get_sentiment(lat, lon, km_radius):
     response = process_aggregate_response(aggregate_polarity, sample_size)
     return jsonify(response)
 
+port = int(os.environ.get('PORT', 46012))
+if is_prod:
+    app.run(host='0.0.0.0', port=port, debug=True)
+
 # Remove the "debug=True" for production
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 46012))
-    if is_prod:
-        app.run(host='0.0.0.0', port=port, debug=True)
-    else:
-        app.run(host='localhost', port=46012, debug=True, threaded=True)
+    app.run(host='localhost', port=46012, debug=True, threaded=True)
